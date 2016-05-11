@@ -1,0 +1,21 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="AtlasOfConsonance:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/AtlasOfConsonance_jar</output-path>
+    <root id="archive" name="AtlasOfConsonance.jar">
+      <element id="module-output" name="AtlasOfConsonance" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../beads/library/jna.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../beads/library/beads.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../beads/library/tools.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../beads/library/jl1.0.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../beads/library/beads-io.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../beads/library/jarjar-1.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../beads/library/mp3spi1.9.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../beads/library/tritonus_share.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../beads/library/tritonus_aos-0.3.6.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../beads/library/org-jaudiolibs-jnajack.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../beads/library/org-jaudiolibs-audioservers.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../beads/library/org-jaudiolibs-audioservers-jack.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../beads/library/org-jaudiolibs-audioservers-javasound.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="atlasofconsonance" default="all">
+  
+  
+  <property file="build.properties"/>
+  <!-- Uncomment the following property if no tests compilation is needed -->
+  <!-- 
+  <property name="skip.tests" value="true"/>
+   -->
+  
+  <!-- Compiler options -->
+  
+  <property name="compiler.debug" value="on"/>
+  <property name="compiler.generate.no.warnings" value="off"/>
+  <property name="compiler.args" value=""/>
+  <property name="compiler.max.memory" value="700m"/>
+  <patternset id="ignored.files">
+    <exclude name="**/*.hprof/**"/>
+    <exclude name="**/*.pyc/**"/>
+    <exclude name="**/*.pyo/**"/>
+    <exclude name="**/*.rbc/**"/>
+    <exclude name="**/*~/**"/>
+    <exclude name="**/.DS_Store/**"/>
+    <exclude name="**/.git/**"/>
+    <exclude name="**/.hg/**"/>
+    <exclude name="**/.svn/**"/>
+    <exclude name="**/CVS/**"/>
+    <exclude name="**/RCS/**"/>
+    <exclude name="**/SCCS/**"/>
+    <exclude name="**/__pycache__/**"/>
+    <exclude name="**/_svn/**"/>
+    <exclude name="**/rcs/**"/>
+    <exclude name="**/vssver.scc/**"/>
+    <exclude name="**/vssver2.scc/**"/>
+  </patternset>
+  <patternset id="library.patterns">
+    <include name="*.war"/>
+    <include name="*.swc"/>
+    <include name="*.apk"/>
+    <include name="*.zip"/>
+    <include name="*.ear"/>
+    <include name="*.egg"/>
+    <include name="*.ane"/>
+    <include name="*.jar"/>
+  </patternset>
+  <patternset id="compiler.resources">
+    <exclude name="**/?*.java"/>
+    <exclude name="**/?*.form"/>
+    <exclude name="**/?*.class"/>
+    <exclude name="**/?*.groovy"/>
+    <exclude name="**/?*.scala"/>
+    <exclude name="**/?*.flex"/>
+    <exclude name="**/?*.kt"/>
+    <exclude name="**/?*.clj"/>
+    <exclude name="**/?*.aj"/>
+  </patternset>
+  
+  <!-- JDK definitions -->
+  
+  <property name="jdk.bin.1.8" value="${jdk.home.1.8}/bin"/>
+  <path id="jdk.classpath.1.8">
+    <fileset dir="${jdk.home.1.8}">
+      <include name="jre/lib/charsets.jar"/>
+      <include name="jre/lib/deploy.jar"/>
+      <include name="jre/lib/ext/cldrdata.jar"/>
+      <include name="jre/lib/ext/dnsns.jar"/>
+      <include name="jre/lib/ext/jaccess.jar"/>
+      <include name="jre/lib/ext/jfxrt.jar"/>
+      <include name="jre/lib/ext/localedata.jar"/>
+      <include name="jre/lib/ext/nashorn.jar"/>
+      <include name="jre/lib/ext/sunec.jar"/>
+      <include name="jre/lib/ext/sunjce_provider.jar"/>
+      <include name="jre/lib/ext/sunpkcs11.jar"/>
+      <include name="jre/lib/ext/zipfs.jar"/>
+      <include name="jre/lib/javaws.jar"/>
+      <include name="jre/lib/jce.jar"/>
+      <include name="jre/lib/jfr.jar"/>
+      <include name="jre/lib/jfxswt.jar"/>
+      <include name="jre/lib/jsse.jar"/>
+      <include name="jre/lib/management-agent.jar"/>
+      <include name="jre/lib/plugin.jar"/>
+      <include name="jre/lib/resources.jar"/>
+      <include name="jre/lib/rt.jar"/>
+    </fileset>
+  </path>
+  
+  <property name="project.jdk.home" value="${jdk.home.1.8}"/>
+  <property name="project.jdk.bin" value="${jdk.bin.1.8}"/>
+  <property name="project.jdk.classpath" value="jdk.classpath.1.8"/>
+  
+  
+  <!-- Project Libraries -->
+  
+  <path id="library.library.classpath">
+    <fileset dir="${basedir}/../../beads/library">
+      <patternset refid="library.patterns"/>
+    </fileset>
+  </path>
+  <!-- Register Custom Compiler Taskdefs -->
+  <property name="javac2.home" value="${idea.home}/lib"/>
+  <path id="javac2.classpath">
+    <pathelement location="${javac2.home}/javac2.jar"/>
+    <pathelement location="${javac2.home}/jdom.jar"/>
+    <pathelement location="${javac2.home}/asm-all.jar"/>
+    <pathelement location="${javac2.home}/jgoodies-forms.jar"/>
+  </path>
+  <target name="register.custom.compilers">
+    <taskdef name="javac2" classname="com.intellij.ant.Javac2" classpathref="javac2.classpath"/>
+    <taskdef name="instrumentIdeaExtensions" classname="com.intellij.ant.InstrumentIdeaExtensions" classpathref="javac2.classpath"/>
+  </target>
+  
+  <!-- Modules -->
+  
+  
+  <!-- Module AtlasOfConsonance -->
+  
+  <dirname property="module.atlasofconsonance.basedir" file="${ant.file}"/>
+  
+  
+  <property name="module.jdk.home.atlasofconsonance" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.atlasofconsonance" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.atlasofconsonance" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.atlasofconsonance" value="-encoding UTF-8 -source 8 -target 8 ${compiler.args}"/>
+  
+  <property name="atlasofconsonance.output.dir" value="${module.atlasofconsonance.basedir}/out/production/AtlasOfConsonance"/>
+  <property name="atlasofconsonance.testoutput.dir" value="${module.atlasofconsonance.basedir}/out/test/AtlasOfConsonance"/>
+  
+  <path id="atlasofconsonance.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="atlasofconsonance.module.production.classpath">
+    <path refid="${module.jdk.classpath.atlasofconsonance}"/>
+    <path refid="library.library.classpath"/>
+  </path>
+  
+  <path id="atlasofconsonance.runtime.production.module.classpath">
+    <pathelement location="${atlasofconsonance.output.dir}"/>
+    <path refid="library.library.classpath"/>
+  </path>
+  
+  <path id="atlasofconsonance.module.classpath">
+    <path refid="${module.jdk.classpath.atlasofconsonance}"/>
+    <pathelement location="${atlasofconsonance.output.dir}"/>
+    <path refid="library.library.classpath"/>
+  </path>
+  
+  <path id="atlasofconsonance.runtime.module.classpath">
+    <pathelement location="${atlasofconsonance.testoutput.dir}"/>
+    <pathelement location="${atlasofconsonance.output.dir}"/>
+    <path refid="library.library.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.atlasofconsonance">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.atlasofconsonance">
+    <patternset refid="excluded.from.module.atlasofconsonance"/>
+  </patternset>
+  
+  <path id="atlasofconsonance.module.sourcepath">
+    <dirset dir="${module.atlasofconsonance.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.atlasofconsonance" depends="compile.module.atlasofconsonance.production,compile.module.atlasofconsonance.tests" description="Compile module AtlasOfConsonance"/>
+  
+  <target name="compile.module.atlasofconsonance.production" depends="register.custom.compilers" description="Compile module AtlasOfConsonance; production classes">
+    <mkdir dir="${atlasofconsonance.output.dir}"/>
+    <javac2 destdir="${atlasofconsonance.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.atlasofconsonance}/javac">
+      <compilerarg line="${compiler.args.atlasofconsonance}"/>
+      <bootclasspath refid="atlasofconsonance.module.bootclasspath"/>
+      <classpath refid="atlasofconsonance.module.production.classpath"/>
+      <src refid="atlasofconsonance.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.atlasofconsonance"/>
+    </javac2>
+    
+    <copy todir="${atlasofconsonance.output.dir}">
+      <fileset dir="${module.atlasofconsonance.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.atlasofconsonance.tests" depends="register.custom.compilers,compile.module.atlasofconsonance.production" description="compile module AtlasOfConsonance; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.atlasofconsonance" description="cleanup module">
+    <delete dir="${atlasofconsonance.output.dir}"/>
+    <delete dir="${atlasofconsonance.testoutput.dir}"/>
+  </target>
+  
+  <target name="init" description="Build initialization">
+    <!-- Perform any build initialization in this target -->
+  </target>
+  
+  <target name="clean" depends="clean.module.atlasofconsonance" description="cleanup all"/>
+  
+  <target name="build.modules" depends="init, clean, compile.module.atlasofconsonance" description="build all modules"/>
+  
+  <target name="init.artifacts">
+    <property name="artifacts.temp.dir" value="${basedir}/__artifacts_temp"/>
+    <property name="artifact.output.atlasofconsonance:jar" value="${basedir}/out/artifacts/AtlasOfConsonance_jar"/>
+    <mkdir dir="${artifacts.temp.dir}"/>
+    <property name="temp.jar.path.AtlasOfConsonance.jar" value="${artifacts.temp.dir}/AtlasOfConsonance.jar"/>
+  </target>
+  
+  <target name="artifact.atlasofconsonance:jar" depends="init.artifacts, compile.module.atlasofconsonance" description="Build &#39;AtlasOfConsonance:jar&#39; artifact">
+    <property name="artifact.temp.output.atlasofconsonance:jar" value="${artifacts.temp.dir}/AtlasOfConsonance_jar"/>
+    <mkdir dir="${artifact.temp.output.atlasofconsonance:jar}"/>
+    <jar destfile="${temp.jar.path.AtlasOfConsonance.jar}" duplicate="preserve" filesetmanifest="mergewithoutmain">
+      <zipfileset dir="${atlasofconsonance.output.dir}"/>
+      <zipfileset src="${basedir}/../../beads/library/jna.jar"/>
+      <zipfileset src="${basedir}/../../beads/library/beads.jar"/>
+      <zipfileset src="${basedir}/../../beads/library/tools.jar"/>
+      <zipfileset src="${basedir}/../../beads/library/jl1.0.1.jar"/>
+      <zipfileset src="${basedir}/../../beads/library/beads-io.jar"/>
+      <zipfileset src="${basedir}/../../beads/library/jarjar-1.0.jar"/>
+      <zipfileset src="${basedir}/../../beads/library/mp3spi1.9.4.jar"/>
+      <zipfileset src="${basedir}/../../beads/library/tritonus_share.jar"/>
+      <zipfileset src="${basedir}/../../beads/library/tritonus_aos-0.3.6.jar"/>
+      <zipfileset src="${basedir}/../../beads/library/org-jaudiolibs-jnajack.jar"/>
+      <zipfileset src="${basedir}/../../beads/library/org-jaudiolibs-audioservers.jar"/>
+      <zipfileset src="${basedir}/../../beads/library/org-jaudiolibs-audioservers-jack.jar"/>
+      <zipfileset src="${basedir}/../../beads/library/org-jaudiolibs-audioservers-javasound.jar"/>
+    </jar>
+    <copy file="${temp.jar.path.AtlasOfConsonance.jar}" tofile="${artifact.temp.output.atlasofconsonance:jar}/AtlasOfConsonance.jar"/>
+  </target>
+  
+  <target name="build.all.artifacts" depends="artifact.atlasofconsonance:jar" description="Build all artifacts">
+    <mkdir dir="${artifact.output.atlasofconsonance:jar}"/>
+    <copy todir="${artifact.output.atlasofconsonance:jar}">
+      <fileset dir="${artifact.temp.output.atlasofconsonance:jar}"/>
+    </copy>
+    
+    <!-- Delete temporary files -->
+    <delete dir="${artifacts.temp.dir}"/>
+  </target>
+  
+  <target name="all" depends="build.modules, build.all.artifacts" description="build all"/>
+</project>

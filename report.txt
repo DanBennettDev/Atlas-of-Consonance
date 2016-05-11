@@ -1,0 +1,70 @@
+
+Project: Atlas of Consonance
+Ant file: build.xml
+Start class: Test_AppRough.java
+Libraries: Beads http://www.beadsproject.net/ (for audio)
+
+BriefDescription: An application for visualising and auditioning musical consonances. Circles represent 3 note harmonies in just intonation. Click on them to hear and receive information about the chord. Guidelines mark the intervals of 12 tone equal temperament, thicker notes indicate the intervals of the 12ET major scale.
+
+
+
+Report:
+This project is an application for visualising and exploring consonances in scales. The idea is based on an article by Norman Sohl here: https://sohl.com/maptone/
+
+I developed on Sohl's visualisation by applying the sonic roughness measure detailed in this paper http://www.acousticslab.org/learnmoresra/files/vassilakis2005sre.pdf.
+
+The goal is to allow the user to specify a scale, and the spectral signature of a note. This information is used to build a map of the three note chords that can be formed in that scale (the root note of the scale always forming one of the three). Each chord is marked with a circle, the size of which corresponds to its relative consonance. The user can then click on any of these circles to hear the chord and receive data on its relative consonance and the notes which comprise it.
+Data is reported in the main currencies used for the consideration of tuning systems -ratios (both fraction and decimal) and "cents" (https://en.wikipedia.org/wiki/Cent_(music)).
+Guidelines indicate the equal temperament intervals.
+
+I am interested in non-standard tuning systems and would like to use this as a tool for composition. As such I have designed this to be as flexible as possible for future extension. I want to be able to represent non-octaving and arbitrary scales, just intonation scales of arbitrary limit (ie- more or less than 12 notes per octave), though little of this structure is taken advantage of in the current implementation which shows only a single octave of a single default scale.
+
+Scales are currently just intonation only, built on the basis of a harmonic limit (https://en.wikipedia.org/wiki/Limit_(music))
+I have used JavaFX for the GUI since I wanted to learn to use (what appears to be) the most up-to-date Java graphics library.
+
+Limitations:
+At present the app is set up for three note chords only,  does not have a gui for changing the root note, the note's spectral signature, or the scale - instead these are defaulted.
+At present the horizontal guidelines
+
+
+Design Process:
+MODEL:
+Having decided I would follow a Model View Presenter design pattern, I began by coding the core, non graphical section of the program, with a general sense of how the gui might look and function, but knowing that it did not to be considered in detail yet. I sketched a pseudo-UML diagram of the classes that would be required to create the AC_Map structure. I wanted to begin with a simple model which would still leave some room to explore interesting harmonic behaviour. I decided that the simplest class should be a spectrum - a collection of sine partials - frequency/amplitude pairs, normalised to have a root frequency of 1 to allow transposition. I knew that I wanted to begin simply, working with harmonic spectra, but also that having an interest in indonesian gamelan music, I would eventually want to be able to model inharmonic percussion. As such I did not impose a harmonic (integer series) spectrum at this point, but knew I would do so further up the heirarchy for my first prototype.
+
+Above this would be the Note class - spectrum plus an overall scaling amplitude and a root frequency.
+
+Above this would be the Scale - a collection of notes. Although I knew I would want to explore arbitrary scales, for simplicity I chose to begin with a simple rule based scale model - Just Intonation with no excluded ratios. This allows me to test the application with a wide range of scales of vastly differing sizes and qualities by varying a single number. In future I will likely want to refactor this class into an interface, with JustScale, ArbitraryScale etc. implementations. Unfortunately it didn't occur to me to begin this way at the time, but the class is simple enough that refactoring in this manner shouldn't be complex. At this point I had made the assumption that harmonic spectrum would be invariant across registers - which is not reflective of real-world acoustic behaviour, but is a fairly common simplification in audio synthesis.
+
+I originally moved from here to begin developing the Map Class, but quickly realised that although I was correct to initially simplify development by working with register-invariant harmonic spectra, a simple change to structure now, would make it easier to later refactor, to allow spectrum to vary across registers. I acheived this by removing Note from the scale class and combining Note and Scale under a new class: Instrument. For the moment this class would take a base Note, plus a scale, and generate the set of playable notes by simply transposing the spectrum of the base note. But having made this change, in future it would not be difficult to apply other rules to the generation of the note collection.
+
+The Map class was then developed, implementing vassilakis' roughness algorithm and building a 2d array representing all notes playable by two voices of a given Instrument. I added a cursor to mark the note currently under focus, and this completed my Model.
+
+GUI
+I now began considering how my Presenter and View would interface with my Model. I knew that I would want to be able to alter several parts of the model independently: The spectrum, the scale and the currently selected note. I would want to generate both sound and visuals, and I thought it possible that the best presentation approach might be to have separate windows, openable from buttons, to control the different parameters. This being the case it seemed that I would need more than one presenter class, and that each of these presenters would need their methods triggerable on the basis of changes to the model by other presenter classes they knew (or should know) nothing about. This being the case I decided to use the observer design pattern. The model being made observable and each presenter set as an observer. Since I did not need my classes to extend others for any other reason, I would use the Observer/Observable classes in the core library.
+
+Wanting to be able to test my GUI automatically as far as I could, I wanted to separate out as much calculation as possible into the presenter classes, leaving the views to simply draw the structures described. But to keep code clear and uncluttered I also wanted to simplify the calling of the View classes, without needing to manually set up relationships to the presenter. This being the case I decided that my views should extend my presenters.
+
+I began with the visualisation of the map. I wrote and tested the presenter so far as I could before I began to feel that visual feedback would be helpful. I wrote a very simple view, displaying the grid, and wrote a rough main class (Test_AppRough) to wrap and run the classes. At time of writing this rough Test wrapper is still the top level class, from which main is called, and it contains some elements (notably the title) that should be separated out into other classes.
+
+I chose to use JavaFX for my view because a little reading suggested that this is likely the future of Java GUI development, and I wanted to gain experience working with it.
+
+The presenter/view pattern above was repeated for my audio synthesis class. Here I chose to use the audio framework Beads, since it seemed to be the simplest and most intuitive audio framework available for Java - and my audio synthesis engine only needed to support additive synthesis (this a more-or-less direct mapping into sound of the spectral model the rest of the app is predicated on.)
+
+From here I need to add additional guis for spectral signature, scale, changing the root note. I am unlikely to add these before handing in now, but the pattern will simply follow that described above, with each of these elements having its own presenter and view. The observer structure hopefully ensures that there should be no great complexity in adding these extra guis, and having them work alongside each other, while remaining independent. JavaFX's gridpane class makes it easy to add and position objects; so although it also makes available XML and CSS layout methods, for this simple app, which I now expect to be a single window layout, I would likely continue specifying layout directly in java. For a larger app where consistent design needs to be applied over several windows, the scripting language layout facilities would be invaluable.
+
+Late change: Three Voices
+I then refactored my code to allow for 3 voice harmonies, changing the map class to calculate roughness for 3 voices and the synth class to play three voices. At present voice 0 always plays the root note of the chord. Representing three mobile voices will be handled later via a gui to change the root note - changing this will redraw the screen to represent all chords in the scale which have the new chord as its lowest note.
+
+
+Todo:
+add gui to change spectral signature of note
+add gui to change scale
+add gui to change root note
+find better visual feedback on consonance - colour as well as size?
+
+
+
+IDE - IntelliJ IDEA community edition and Sublime Text
+Mostly IDEA, but Sublime text for fast early development stage of a class/group of related clases, or for complex portions of code. Simply because I can easily turn off distracting features like syntax checking, and work in a mixture of pseudocode and correct Java, so that I only need think about specifying the algorithm and not the syntactic correctness. I then move to IDEA when I think the algorithm is right.
+I made considerable use of IDEA's refactoring functionality since its eyes are sharper than mine.
+

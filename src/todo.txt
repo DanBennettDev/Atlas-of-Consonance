@@ -1,0 +1,33 @@
+
+
+11b) double check testing coverage.
+11c) package into jar
+11d) Write up and Hand In
+
+
+12) add gui for synth.
+12a) add gui for changing root note
+12b) add third note
+
+13) add gui for changing scale (& pointer to it)
+14) add gui for changing spectrum (& pointer to it)
+15) mark names of major intervals
+16) emphasise major interval lines
+
+
+
+17) Size of dots is perhaps not clear enough indicator. Add colour scale as well?
+
+
+19) third dimension - switch to 3 notes, change root note by scale interval
+
+-- Reduce ratios to lowest form (octave shifter)
+
+BEFORE HAND IN:
+    !!!!!!COMMENT!!!!
+
+ add minimum roughness for better scaling?
+ prevent from redrawing grid unless size changes?
+
+Scale - refactor to deal with ET.
+      - refactor to deal with "just" scales for arbitrary inharmonic spectra
